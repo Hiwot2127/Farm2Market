@@ -1,6 +1,6 @@
 # Farm2Table
 
-Farm2Table is a B2B marketplace platform connecting farmers directly with merchants, aimed at reducing costs and ensuring fair compensation for farmers while providing affordable fresh produce to consumers.
+Farm2Table is a Business to Business marketplace platform connecting farmers directly with merchants, aimed at reducing costs and ensuring fair compensation for farmers while providing affordable fresh produce to consumers.
 
 ## Problem
 

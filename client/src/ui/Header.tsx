@@ -14,7 +14,7 @@ import { store } from "../lib/store";
 
 const bottomNavigation = [
   { title: "Home", link: "/" },
-  { title: "About Us", link: "/about" },
+  { title: "About us", link: "/product" },
   { title: "Contact Us", link: "/contact" },
 ];
 
@@ -81,7 +81,7 @@ const Header = () => {
         </div>
         {/* Sign Up Button */}
         <Link
-          to={"/signup"}
+          to={"/profile"}
           className="bg-[#00704A] text-whiteText px-4 py-2 rounded-md hover:bg-[#005B49] duration-200"
         >
           Sign Up

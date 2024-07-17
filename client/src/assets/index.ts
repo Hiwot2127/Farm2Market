@@ -17,6 +17,7 @@ import homeBanner from "./homeBanner.jpg";
 import farmer1 from "./farmer1.jpg";
 import farmer2 from "./farmer2.jpg";
 import farmer3 from "./farmer3.jpg";
+import product2 from "./products2.webp";
 
 export {
   logo,
@@ -37,6 +38,8 @@ export {
   homeBanner,
  farmer1,
  farmer2,
- farmer3 
+ farmer3,
+ product2 
+
 
 };

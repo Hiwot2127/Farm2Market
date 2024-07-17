@@ -14,6 +14,9 @@ import brandFive from "./brands/brandFive.webp";
 import brandSix from "./brands/brandSix.webp";
 import productPayment from "./productPayment.webp";
 import homeBanner from "./homeBanner.jpg";
+import farmer1 from "./farmer1.jpg";
+import farmer2 from "./farmer2.jpg";
+import farmer3 from "./farmer3.jpg";
 
 export {
   logo,
@@ -32,4 +35,8 @@ export {
   brandSix,
   productPayment,
   homeBanner,
+ farmer1,
+ farmer2,
+ farmer3 
+
 };

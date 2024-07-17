@@ -1,60 +1,42 @@
-import React, { useEffect, useState } from "react";
-import Container from "./Container";
-import { config } from "../../config";
-import { getData } from "../lib";
-import Title from "./Title";
-import { Link } from "react-router-dom";
-import { CategoryProps } from "../../type";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { farmer3 } from "../assets";
 
-const Categories = () => {
-  const [categories, setCategories] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const endpoint = `${config?.baseUrl}/categories`;
-      try {
-        const data = await getData(endpoint);
-        setCategories(data);
-      } catch (error) {
-        console.error("Error fetching data", error);
-      }
-    };
-    fetchData();
-  }, []);
+const SectionLayout: React.FC = () => {
   return (
-    <Container>
-      <div className="mb-10">
-        <div className="flex items-center justify-between">
-          <Title text="Popular categories" />
-          <Link
-            to={"/category/tvAndAudio"}
-            className="font-medium relative group overflow-hidden"
-          >
-            View All Categories{" "}
-            <span className="absolute bottom-0 left-0 w-full block h-[1px] bg-gray-600 -translate-x-[100%] group-hover:translate-x-0 duration-300" />
-          </Link>
-        </div>
-        <div className="w-full h-[1px] bg-gray-200 mt-3" />
-      </div>
-      <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-7">
-        {categories.map((item: CategoryProps) => (
-          <Link
-            to={`/category/${item?._base}`}
-            key={item?._id}
-            className="w-full h-auto relative group overflow-hidden"
-          >
+    <section className="bg-white py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Who We Are</h2>
+            <p className="text-gray-700 mb-6">
+              Farm2Table is a Business to Business (B2B) platform that directly connects farmers with merchants, eliminating intermediaries to ensure fair compensation for farmers, lower costs for merchants, and alleviating the high inflation of agricultural goods in the market.
+            </p>
+            <Link
+              to="#"
+              className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-[#004437] hover:bg-[#004437]"
+            >
+              Get Started
+            </Link>
+          </div>
+          <div>
             <img
-              src={item?.image}
-              alt="categoryImage"
-              className="w-full h-auto rounded-md group-hover:scale-110 duration-300"
+              className="rounded-lg shadow-lg w-full h-[80%]"
+              src={ farmer3 }
+              alt="Farm2Table"
             />
-            <div className="absolute bottom-3 w-full text-center">
-              <p className="text-sm md:text-base font-bold">{item?.name}</p>
-            </div>
-          </Link>
-        ))}
+          </div>
+        </div>
       </div>
-    </Container>
+    </section>
+  );
+};
+
+const Categories: React.FC = () => {
+  return (
+    <div>
+      <SectionLayout />
+    </div>
   );
 };
 

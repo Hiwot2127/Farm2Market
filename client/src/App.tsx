@@ -12,14 +12,14 @@ function App() {
     <main>
       <BannerCategories />
       <HomeBanner />
-      <Hightlights />
-      <Categories />
+       <Hightlights />
+      <Categories /> 
       {/* ProductList */}
-      <ProductList />
+      {/* <ProductList /> */}
       {/* DiscountedBanner */}
-      <DiscountedBanner />
+      {/* <DiscountedBanner /> */}
       {/* Blog */}
-      <Blog />
+      {/* <Blog /> */}
     </main>
   );
 }

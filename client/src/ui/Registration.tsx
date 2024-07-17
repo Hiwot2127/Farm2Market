@@ -1,6 +1,4 @@
 import { useState } from "react";
-("./Login");
-import Label from "./Label";
 import { MdPhotoLibrary } from "react-icons/md";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../lib/firebase";
@@ -9,13 +7,14 @@ import { doc, setDoc } from "firebase/firestore";
 import Login from "./Login";
 
 const Registration = () => {
-  const [login, setLogin] = useState(true);
+  const [login, setLogin] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errMsg, setErrMsg] = useState("");
   const [avatar, setAvatar] = useState({
     file: null,
     url: "",
   });
+  const [isMerchant, setIsMerchant] = useState(true);
 
   const handleAvatar = (e: any) => {
     if (e.target.files[0]) {
@@ -25,11 +24,18 @@ const Registration = () => {
       });
     }
   };
+
   const handleRegistration = async (e: any) => {
     e.preventDefault();
     const formData = new FormData(e.target);
-    const { firstName, lastName, email, password }: any =
+    const { fullName, phone, email, region, city, woreda, password, confirmPassword, productType }: any =
       Object.fromEntries(formData);
+
+    if (password !== confirmPassword) {
+      setErrMsg("Passwords do not match.");
+      return;
+    }
+
     try {
       setLoading(true);
       const res = await createUserWithEmailAndPassword(auth, email, password);
@@ -38,11 +44,16 @@ const Registration = () => {
         imageUrl = await upload(avatar?.file);
       }
       await setDoc(doc(db, "users", res.user.uid), {
-        firstName,
-        lastName,
+        fullName,
+        phone,
         email,
+        region,
+        city,
+        woreda,
         avatar: imageUrl,
         id: res.user.uid,
+        userType: isMerchant ? "Merchant" : "Farmer",
+        productType,
       });
       setLogin(true);
     } catch (error: any) {
@@ -57,7 +68,6 @@ const Registration = () => {
         case "auth/email-already-in-use":
           errorMessage = "This email is already in use. Try another email.";
           break;
-        // Add more cases as needed
         default:
           errorMessage = "An error occurred. Please try again.";
       }
@@ -67,125 +77,176 @@ const Registration = () => {
       setLoading(false);
     }
   };
+
   return (
-    <div>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-teal-600 to-blue-800">
       {login ? (
         <Login setLogin={setLogin} />
       ) : (
-        <div className="bg-gray-950 rounded-lg">
-          <form
-            onSubmit={handleRegistration}
-            className="max-w-5xl mx-auto pt-10 px-10 lg:px-0 text-white"
-          >
-            <div className="border-b border-b-white/10 pb-5">
-              <h2 className="text-lg font-semibold uppercase leading-7">
-                Registration Form
-              </h2>
-              <p className="mt-1 text-sm leading-6 text-gray-400">
-                You need to provide required information to get register with
-                us.
-              </p>
+        <div className="flex bg-white shadow-lg rounded-lg overflow-hidden w-11/12 max-w-4xl">
+          <div className="w-1/2 bg-cover bg-center p-6 h-full flex flex-col justify-center bg-[#005B49]" style={{ backgroundImage: "url('/path/to/background-image.jpg')" }}>
+            <h1 className="text-white text-3xl font-bold">Farm2Table</h1>
+          </div>
+          <div className="w-1/2 p-6">
+            <h2 className="text-gray-700 text-2xl font-semibold mb-4">Register</h2>
+            <div className="mb-4 flex justify-center">
+              <div className="relative inline-flex">
+                <button
+                  onClick={() => setIsMerchant(true)}
+                  className={`px-6 py-2 rounded-2 ${isMerchant ? "bg-[#005B49] text-white" : "bg-gray-200 text-gray-600"}`}
+                >
+                  Merchant
+                </button>
+                <button
+                  onClick={() => setIsMerchant(false)}
+                  className={`px-6 py-2 rounded-2 ${!isMerchant ? "bg-[#005B49] text-white" : "bg-gray-200 text-gray-600"}`}
+                >
+                  Farmer
+                </button>
+              </div>
             </div>
-            <div className="border-b border-b-white/10 pb-5">
-              <div className="mt-5 grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-6">
-                <div className="sm:col-span-3">
-                  <Label title="First name" htmlFor="firstName" />
-                  <input
-                    type="text"
-                    name="firstName"
-                    className="block w-full rounded-md border-0 bg-white/5 py-1.5 px-4 outline-none text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-skyText sm:text-sm sm:leading-6 mt-2"
-                  />
-                </div>
-                <div className="sm:col-span-3">
-                  <Label title="Last name" htmlFor="lastName" />
-                  <input
-                    type="text"
-                    name="lastName"
-                    className="block w-full rounded-md border-0 bg-white/5 py-1.5 px-4 outline-none text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-skyText sm:text-sm sm:leading-6 mt-2"
-                  />
-                </div>
-                <div className="sm:col-span-4">
-                  <Label title="Email address" htmlFor="email" />
-                  <input
-                    type="email"
-                    name="email"
-                    className="block w-full rounded-md border-0 bg-white/5 py-1.5 px-4 outline-none text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-skyText sm:text-sm sm:leading-6 mt-2"
-                  />
-                </div>
-                <div className="sm:col-span-4">
-                  <Label title="Password" htmlFor="password" />
-                  <input
-                    type="password"
-                    name="password"
-                    className="block w-full rounded-md border-0 bg-white/5 py-1.5 px-4 outline-none text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-skyText sm:text-sm sm:leading-6 mt-2"
-                  />
-                </div>
-                <div className="col-span-full">
-                  <div className="mt-2 flex items-center gap-x-3">
-                    <div className="flex-1">
-                      <Label title="Cover photo" />
-                      <div className="mt-2 flex justify-center rounded-lg border border-dashed border-white/25 px-6 py-4">
-                        <div className="flex flex-col items-center text-center">
-                          <div className="w-14 h-14 border border-gray-600 rounded-full p-1">
-                            {avatar?.url ? (
-                              <img
-                                src={avatar?.url}
-                                alt="userImage"
-                                className="w-full h-full rounded-full object-cover"
-                              />
-                            ) : (
-                              <MdPhotoLibrary className="mx-auto h-full w-full text-gray-500" />
-                            )}
-                          </div>
-                          <div className="mt-4 flex items-center mb-1 text-sm leading-6 text-gray-400">
-                            <label htmlFor="file-upload">
-                              <span className="relative cursor-pointer rounded-md px-2 py-1 bg-gray-900 font-semibold text-gray-200 hover:bg-gray-800">
-                                Upload a file
-                              </span>
-                              <input
-                                type="file"
-                                name="file-upload"
-                                id="file-upload"
-                                className="sr-only"
-                                onChange={handleAvatar}
-                              />
-                            </label>
-                            <p className="pl-1">or drag and drop</p>
-                          </div>
-                          <p className="text-xs leading-5 text-gray-400">
-                            PNG, JPG, GIF up to 10MB
-                          </p>
+            <form onSubmit={handleRegistration}>
+              <div className="mb-4">
+                <label className="block text-gray-700 mb-2">Full Name</label>
+                <input
+                  type="text"
+                  name="fullName"
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-700 mb-2">Phone</label>
+                <input
+                  type="text"
+                  name="phone"
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-700 mb-2">Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-700 mb-2">Region</label>
+                <input
+                  type="text"
+                  name="region"
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-700 mb-2">City</label>
+                <input
+                  type="text"
+                  name="city"
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-700 mb-2">Woreda</label>
+                <input
+                  type="text"
+                  name="woreda"
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-700 mb-2">Password</label>
+                <input
+                  type="password"
+                  name="password"
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-700 mb-2">Confirm</label>
+                <input
+                  type="password"
+                  name="confirmPassword"
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-700 mb-2">Product Type</label>
+                <select
+                  name="productType"
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                >
+                  <option value="">select</option>
+                  <option value="Type1">Type1</option>
+                  <option value="Type2">Type2</option>
+                  <option value="Type3">Type3</option>
+                </select>
+              </div>
+              <div className="col-span-full mb-4">
+                <div className="mt-2 flex items-center gap-x-3">
+                  <div className="flex-1">
+                    <label className="block text-gray-700 mb-2">Avatar</label>
+                    <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-300 px-6 py-4">
+                      <div className="flex flex-col items-center text-center">
+                        <div className="w-14 h-14 border border-gray-600 rounded-full p-1">
+                          {avatar?.url ? (
+                            <img
+                              src={avatar?.url}
+                              alt="userImage"
+                              className="w-full h-full rounded-full object-cover"
+                            />
+                          ) : (
+                            <MdPhotoLibrary className="mx-auto h-full w-full text-gray-500" />
+                          )}
                         </div>
+                        <div className="mt-4 flex items-center mb-1 text-sm leading-6 text-gray-400">
+                          <label htmlFor="file-upload">
+                            <span className="relative cursor-pointer rounded-md px-2 py-1 bg-gray-900 font-semibold text-gray-200 hover:bg-gray-800">
+                              Upload a file
+                            </span>
+                            <input
+                              type="file"
+                              name="file-upload"
+                              id="file-upload"
+                              className="sr-only"
+                              onChange={handleAvatar}
+                            />
+                          </label>
+                          <p className="pl-1">or drag and drop</p>
+                        </div>
+                        <p className="text-xs leading-5 text-gray-400">
+                          PNG, JPG, GIF up to 10MB
+                        </p>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-            {errMsg && (
-              <p className="bg-white/90 text-red-600 text-center py-1 rounded-md tracking-wide font-semibold">
-                {errMsg}
-              </p>
-            )}
-            <button
-              disabled={loading}
-              type="submit"
-              className={`mt-5 w-full py-2 uppercase text-base font-bold tracking-wide text-gray-300 rounded-md hover:text-white hover:bg-indigo-600 duration-200 ${
-                loading ? "bg-gray-500 hover:bg-gray-500" : "bg-indigo-700"
-              }`}
-            >
-              {loading ? "Loading..." : "Send"}
-            </button>
-          </form>
-          <p className="text-sm leading-6 text-gray-400 text-center -mt-2 py-10">
-            Already have an Account{" "}
-            <button
-              onClick={() => setLogin(true)}
-              className="text-gray-200 font-semibold underline underline-offset-2 decoration-[1px] hover:text-white duration-200"
-            >
-              Login
-            </button>
-          </p>
+              {errMsg && (
+                <p className="bg-red-100 text-red-600 text-center py-1 rounded-md tracking-wide font-semibold mb-4">
+                  {errMsg}
+                </p>
+              )}
+              <button
+                disabled={loading}
+                type="submit"
+                className={`w-full py-2 uppercase text-base font-bold tracking-wide text-white rounded-md ${
+                  loading ? "bg-gray-500" : "bg-[#005B49]"
+                } hover:bg-[#004437] duration-200`}
+              >
+                {loading ? "Loading..." : "Sign Up"}
+              </button>
+            </form>
+            <p className="text-sm leading-6 text-gray-400 text-center mt-4">
+              Already have an account?{" "}
+              <button
+                onClick={() => setLogin(true)}
+                className="text-[#005B49] font-semibold underline underline-offset-2 decoration-[1px] hover:text-[#004437] duration-200"
+              >
+                Login
+              </button>
+            </p>
+          </div>
         </div>
       )}
     </div>

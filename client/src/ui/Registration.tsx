@@ -83,10 +83,12 @@ const Registration = () => {
       {login ? (
         <Login setLogin={setLogin} />
       ) : (
-        <div className="flex bg-white shadow-lg rounded-lg overflow-hidden w-11/12 max-w-4xl">
-          <div className="w-1/2 bg-cover bg-center p-6 h-full flex flex-col justify-center bg-[#005B49]" style={{ backgroundImage: "url('/path/to/background-image.jpg')" }}>
+        <div className="flex  mt-20 bg-white shadow-lg rounded-lg overflow-hidden  w-11/12 max-w-4xl">
+          <div className="w-1/2 bg-cover bg-center" style={{ backgroundImage: "url('/path/to/background-image.jpg')" }}>
+          <div className="p-6 h-full flex flex-col justify-center bg-[#005B49]">
             <h1 className="text-white text-3xl font-bold">Farm2Table</h1>
           </div>
+        </div>
           <div className="w-1/2 p-6">
             <h2 className="text-gray-700 text-2xl font-semibold mb-4">Register</h2>
             <div className="mb-4 flex justify-center">

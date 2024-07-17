@@ -1,10 +1,5 @@
 # Farm2Table
 
-![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
-![License](https://img.shields.io/badge/license-MIT-blue)
-![Contributors](https://img.shields.io/badge/contributors-5-orange)
-![Issues](https://img.shields.io/badge/issues-0-brightgreen)
-
 Farm2Table is a B2B marketplace platform connecting farmers directly with merchants, aimed at reducing costs and ensuring fair compensation for farmers while providing affordable fresh produce to consumers.
 
 ## Problem
